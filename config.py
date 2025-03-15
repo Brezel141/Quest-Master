@@ -1,8 +1,9 @@
 import os
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'una_chiave_segreta_casuale'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///database.db'
+    # Required settings - will raise error if not set
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     
     # Mail settings
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
@@ -16,10 +17,19 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     # Development-specific configurations
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')  # Only use default in development
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///database.db')  # Only use default in development
 
 class ProductionConfig(Config):
     DEBUG = False
     # Production-specific configurations
+    @classmethod
+    def init_app(cls, app):
+        # Verify required environment variables are set
+        required_vars = ['SECRET_KEY', 'DATABASE_URL']
+        missing_vars = [var for var in required_vars if not os.environ.get(var)]
+        if missing_vars:
+            raise RuntimeError(f"Missing required environment variables: {', '.join(missing_vars)}")
 
 class TestingConfig(Config):
     TESTING = True
