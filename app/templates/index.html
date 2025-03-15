@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Quest Master - Your Adventure Awaits{% endblock %}
+
+{% block content %}
+{% if not current_user.is_authenticated %}
+    <div class="jumbotron text-center welcome-hero">
+        <h1 class="display-4 mb-4">Welcome to Quest Master!</h1>
+        <p class="lead mb-4">Transform your daily tasks into epic quests. Level up, earn achievements, and conquer your goals!</p>
+        <div class="d-grid gap-2 d-md-block">
+            <a href="{{ url_for('main.register') }}" class="btn btn-primary btn-lg me-2">
+                <i class="fas fa-user-plus me-2"></i>Join the Adventure
+            </a>
+            <a href="{{ url_for('main.login') }}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Continue Your Quest
+            </a>
+        </div>
+    </div>
+{% else %}
+    <div class="quests-container">
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="quest-title mb-0">
+                    <i class="fas fa-map-marked-alt text-primary me-2"></i>Active Quests
+                </h2>
+                <a href="{{ url_for('main.add_task') }}" class="btn btn-primary">
+                    <i class="fas fa-scroll me-2"></i>New Quest
+                </a>
+            </div>
+            {% if tasks %}
+                {% for task in tasks %}
+                    {% if task.quest_type == 'main_quest' and not task.completed %}
+                        <div class="card mb-3 quest-card" {% if task.category %}style="border-left: 4px solid {{ task.category.color }}"{% endif %}>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="card-title mb-1">
+                                            {% if task.category %}
+                                                <i class="fas {{ task.category.icon }} me-2"></i>
+                                            {% endif %}
+                                            {{ task.title }}
+                                        </h5>
+                                        <p class="card-text text-muted small mb-2">
+                                            {% if task.tags %}
+                                                {% for tag in task.tags %}
+                                                    <span class="badge bg-primary me-1">{{ tag.name }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </p>
+                                        <p class="card-text">{{ task.description }}</p>
+                                        {% if task.due_date %}
+                                            <p class="card-text"><small class="text-muted">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</small></p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="ms-3 text-end">
+                                        <span class="badge bg-secondary mb-2">{{ task.difficulty.title() }}</span>
+                                        <br>
+                                        <span class="badge bg-info">{{ task.reward_points }} XP</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Sub-quests section -->
+                                {% set sub_quests = task.sub_quests %}
+                                {% if sub_quests %}
+                                    <div class="mt-3">
+                                        <h6 class="mb-2">Sub-quests:</h6>
+                                        {% for sub_quest in sub_quests %}
+                                            <div class="card mb-2 sub-quest-card" {% if sub_quest.category %}style="border-left: 4px solid {{ sub_quest.category.color }}"{% endif %}>
+                                                <div class="card-body py-2">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <h6 class="mb-1">
+                                                                {% if sub_quest.category %}
+                                                                    <i class="fas {{ sub_quest.category.icon }} me-2"></i>
+                                                                {% endif %}
+                                                                {{ sub_quest.title }}
+                                                            </h6>
+                                                            {% if sub_quest.tags %}
+                                                                <p class="mb-0">
+                                                                    {% for tag in sub_quest.tags %}
+                                                                        <span class="badge bg-primary me-1">{{ tag.name }}</span>
+                                                                    {% endfor %}
+                                                                </p>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="badge bg-info me-2">{{ sub_quest.reward_points }} XP</span>
+                                                            <form action="{{ url_for('main.complete_task', task_id=sub_quest.id) }}" method="POST" class="d-inline">
+                                                                <button type="submit" class="btn btn-success btn-sm">Complete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="mt-3">
+                                    <form action="{{ url_for('main.complete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-success">Complete Quest</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-scroll fa-3x text-muted"></i>
+                    </div>
+                    <h3 class="mb-3">Begin Your Epic Journey!</h3>
+                    <p class="text-muted mb-4">Your quest log awaits its first adventure. Create a quest to start earning rewards!</p>
+                    <a href="{{ url_for('main.add_task') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus-circle me-2"></i>Create Your First Quest
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="completed-quests">
+            <div class="d-flex align-items-center mb-3" style="cursor: pointer;" 
+                 data-bs-toggle="collapse" data-bs-target="#completedQuestsCollapse" 
+                 aria-expanded="false" aria-controls="completedQuestsCollapse">
+                <h2 class="quest-title mb-0">
+                    <i class="fas fa-trophy text-success me-2"></i>Completed Quests
+                </h2>
+                <i class="fas fa-chevron-down ms-2 toggle-icon"></i>
+            </div>
+            <div class="collapse" id="completedQuestsCollapse">
+                {% set completed = [] %}
+                {% for task in tasks %}
+                    {% if task.completed %}
+                        {% set _ = completed.append(task) %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% if completed %}
+                    {% for task in completed %}
+                        <div class="quest-item completed mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-muted">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        {{ task.title }}
+                                    </h5>
+                                    {% if task.description %}
+                                        <p class="card-text text-muted mt-2">{{ task.description }}</p>
+                                    {% endif %}
+                                    <div class="quest-meta mt-2">
+                                        <span class="badge bg-secondary">
+                                            <i class="fas fa-star me-1"></i>{{ task.difficulty }}
+                                        </span>
+                                        {% if task.date_completed %}
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-calendar-check me-1"></i>
+                                                Completed: {{ task.date_completed.strftime('%Y-%m-%d') }}
+                                            </span>
+                                        {% endif %}
+                                        <form action="{{ url_for('main.uncomplete_task', task_id=task.id) }}" 
+                                              method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                                <i class="fas fa-undo"></i> Uncomplete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>No completed quests yet. Keep pushing forward!
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Side Quests Section -->
+        <h3 class="mt-4 mb-3">Side Quests</h3>
+        {% for task in tasks %}
+            {% if task.quest_type == 'side_quest' and not task.completed %}
+                <div class="card mb-3 quest-card" {% if task.category %}style="border-left: 4px solid {{ task.category.color }}"{% endif %}>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="card-title mb-1">
+                                    {% if task.category %}
+                                        <i class="fas {{ task.category.icon }} me-2"></i>
+                                    {% endif %}
+                                    {{ task.title }}
+                                </h5>
+                                <p class="card-text text-muted small mb-2">
+                                    {% if task.tags %}
+                                        {% for tag in task.tags %}
+                                            <span class="badge bg-primary me-1">{{ tag.name }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </p>
+                                <p class="card-text">{{ task.description }}</p>
+                                {% if task.due_date %}
+                                    <p class="card-text"><small class="text-muted">Due: {{ task.due_date.strftime('%Y-%m-%d') }}</small></p>
+                                {% endif %}
+                            </div>
+                            <div class="ms-3 text-end">
+                                <span class="badge bg-secondary mb-2">{{ task.difficulty.title() }}</span>
+                                <br>
+                                <span class="badge bg-info">{{ task.reward_points }} XP</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <form action="{{ url_for('main.complete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-success">Complete Quest</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<style>
+.toggle-icon {
+    transition: transform 0.3s ease;
+}
+[aria-expanded="true"] .toggle-icon {
+    transform: rotate(180deg);
+}
+</style>
+{% endblock %}

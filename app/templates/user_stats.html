@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Stats{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <i class="fas fa-user-circle fa-4x text-primary mb-3"></i>
+            <h2 class="card-title">{{ user.username }}'s Adventure Stats</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-star text-warning me-2"></i>Level Progress
+                        </h4>
+                        <h3 class="text-center mb-3">Level {{ user.level }}</h3>
+                        <div class="progress mb-3" style="height: 25px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ user.progress_to_next_level }}%"
+                                 aria-valuenow="{{ user.progress_to_next_level }}"
+                                 aria-valuemin="0" aria-valuemax="100">
+                                {{ user.progress_to_next_level }}%
+                            </div>
+                        </div>
+                        <p class="text-center">
+                            Next level in: {{ user.xp_for_next_level - (user.points % user.xp_for_next_level) }} XP
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-coins text-warning me-2"></i>Experience Points
+                        </h4>
+                        <div class="text-center">
+                            <h3>{{ user.points }} XP</h3>
+                            <p class="text-muted">Total XP accumulated</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-tasks text-primary me-2"></i>Quest Statistics
+                        </h4>
+                        <div class="row text-center">
+                            <div class="col-md-4 mb-3">
+                                <h5>Main Quests</h5>
+                                <p class="h3">{{ stats.main_quests_completed }}/{{ stats.total_main_quests }}</p>
+                                <p class="text-muted">Completed</p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <h5>Side Quests</h5>
+                                <p class="h3">{{ stats.side_quests_completed }}/{{ stats.total_side_quests }}</p>
+                                <p class="text-muted">Completed</p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <h5>Sub Quests</h5>
+                                <p class="h3">{{ stats.sub_quests_completed }}/{{ stats.total_sub_quests }}</p>
+                                <p class="text-muted">Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-chart-line text-success me-2"></i>Recent Activity
+                        </h4>
+                        {% if recent_completed_quests %}
+                            <div class="list-group">
+                                {% for quest in recent_completed_quests %}
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">{{ quest.title }}</h5>
+                                            <small class="text-muted">
+                                                {{ quest.date_completed.strftime('%Y-%m-%d %H:%M') }}
+                                            </small>
+                                        </div>
+                                        <p class="mb-1">{{ quest.quest_type|replace('_', ' ')|title }}</p>
+                                        <small class="text-warning">
+                                            <i class="fas fa-coins me-1"></i>{{ quest.reward_points }} XP earned
+                                        </small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-center text-muted my-4">No completed quests yet. Time to start your adventure!</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-medal text-warning me-2"></i>Available Achievements
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="achievement-card text-center p-3 {% if 'Novice' in earned_badges %}achieved{% else %}unachieved{% endif %}">
+                                    <i class="fas fa-award fa-2x mb-2 {% if 'Novice' in earned_badges %}text-warning{% else %}text-secondary{% endif %}"></i>
+                                    <h5>Novice</h5>
+                                    <p class="text-muted mb-2">Complete 1 quest</p>
+                                    {% if 'Novice' in earned_badges %}
+                                        <span class="badge bg-success"><i class="fas fa-check me-1"></i>Earned</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ stats.total_completed }}/1 Quests</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="achievement-card text-center p-3 {% if 'Intermediate' in earned_badges %}achieved{% else %}unachieved{% endif %}">
+                                    <i class="fas fa-award fa-2x mb-2 {% if 'Intermediate' in earned_badges %}text-warning{% else %}text-secondary{% endif %}"></i>
+                                    <h5>Intermediate</h5>
+                                    <p class="text-muted mb-2">Complete 5 quests</p>
+                                    {% if 'Intermediate' in earned_badges %}
+                                        <span class="badge bg-success"><i class="fas fa-check me-1"></i>Earned</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ stats.total_completed }}/5 Quests</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="achievement-card text-center p-3 {% if 'Expert' in earned_badges %}achieved{% else %}unachieved{% endif %}">
+                                    <i class="fas fa-award fa-2x mb-2 {% if 'Expert' in earned_badges %}text-warning{% else %}text-secondary{% endif %}"></i>
+                                    <h5>Expert</h5>
+                                    <p class="text-muted mb-2">Complete 10 quests</p>
+                                    {% if 'Expert' in earned_badges %}
+                                        <span class="badge bg-success"><i class="fas fa-check me-1"></i>Earned</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ stats.total_completed }}/10 Quests</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="achievement-card text-center p-3 {% if 'Master' in earned_badges %}achieved{% else %}unachieved{% endif %}">
+                                    <i class="fas fa-award fa-2x mb-2 {% if 'Master' in earned_badges %}text-warning{% else %}text-secondary{% endif %}"></i>
+                                    <h5>Master</h5>
+                                    <p class="text-muted mb-2">Complete 20 quests</p>
+                                    {% if 'Master' in earned_badges %}
+                                        <span class="badge bg-success"><i class="fas fa-check me-1"></i>Earned</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ stats.total_completed }}/20 Quests</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

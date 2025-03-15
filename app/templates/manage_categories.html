@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Category Creation Form -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Create New Category</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('main.manage_categories') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.color.label(class="form-label") }}
+                            {{ form.color(class="form-control", type="color") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.icon.label(class="form-label") }}
+                            {{ form.icon(class="form-control") }}
+                            <small class="text-muted">Enter a Font Awesome icon name (e.g., 'fa-book')</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category List -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Your Categories</h4>
+                </div>
+                <div class="card-body">
+                    {% if categories %}
+                        <div class="row">
+                            {% for category in categories %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="card" style="border-left: 4px solid {{ category.color }}">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="fas {{ category.icon }}"></i>
+                                                <span class="ms-2">{{ category.name }}</span>
+                                            </div>
+                                            <form action="{{ url_for('main.delete_category', category_id=category.id) }}" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-danger btn-sm" 
+                                                        onclick="return confirm('Are you sure you want to delete this category?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">You haven't created any categories yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

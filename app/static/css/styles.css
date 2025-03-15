@@ -1,0 +1,371 @@
+/* Fantasy Theme Variables */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #8b5cf6;
+    --accent-color: #f6b352;
+    --background-color: #1a1c2c;
+    --card-bg: #2a2d3d;
+    --text-primary: #ffffff;
+    --text-secondary: #b8c2cc;
+    --success-color: #48bb78;
+    --danger-color: #e53e3e;
+    --warning-color: #f6ad55;
+}
+
+/* Global Styles */
+body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    font-family: 'Crimson Text', serif;
+    background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z" fill="%232a2d3d" fill-opacity="0.15" fill-rule="evenodd"/%3E%3C/svg%3E');
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--card-bg) !important;
+    border-bottom: 2px solid var(--accent-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.navbar-brand {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.5rem;
+    color: var(--accent-color) !important;
+}
+
+/* Cards */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Quest Items */
+.quest-item {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s;
+}
+
+.quest-item:hover {
+    transform: translateY(-2px);
+}
+
+.quest-item.main-quest {
+    border-left: 4px solid var(--accent-color);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+/* Progress Bars */
+.progress {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 1rem;
+    height: 1.5rem;
+}
+
+.progress-bar {
+    background-color: var(--success-color);
+    border-radius: 1rem;
+}
+
+/* Badges */
+.badge {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-warning {
+    background-color: var(--warning-color);
+    color: #2d3748;
+}
+
+.badge-info {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+/* Forms */
+.form-control {
+    background-color: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-primary);
+}
+
+.form-control:focus {
+    background-color: rgba(0,0,0,0.3);
+    border-color: var(--accent-color);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.2rem rgba(246,179,82,0.25);
+}
+
+/* Custom Fantasy Elements */
+.quest-title {
+    font-family: 'MedievalSharp', cursive;
+    color: var(--accent-color);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.difficulty-badge {
+    font-family: 'MedievalSharp', cursive;
+    padding: 0.3em 1em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.difficulty-easy {
+    background-color: #48bb78;
+    color: white;
+}
+
+.difficulty-normal {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.difficulty-hard {
+    background-color: #f6ad55;
+    color: #2d3748;
+}
+
+.difficulty-epic {
+    background-color: #9f7aea;
+    color: white;
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow: 0 0 5px rgba(159,122,234,0.5); }
+    50% { text-shadow: 0 0 20px rgba(159,122,234,0.8); }
+}
+
+/* Animations */
+.quest-complete {
+    animation: questComplete 0.5s ease-out;
+}
+
+@keyframes questComplete {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* Achievement Cards */
+.achievement-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.achievement-card.achieved {
+    border-color: #ffd700;
+    background-color: rgba(255, 215, 0, 0.05);
+}
+
+.achievement-card.unachieved {
+    opacity: 0.7;
+}
+
+.achievement-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-card h5 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.achievement-card .fas {
+    transition: all 0.3s ease;
+}
+
+.achievement-card:hover .fas {
+    transform: scale(1.1);
+}
+
+.achievement-card.achieved:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+/* Quest Cards */
+.quest-card {
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.quest-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sub-quest-card {
+    margin-left: 2rem;
+    border-left-width: 4px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.sub-quest-card:hover {
+    transform: translateX(4px);
+}
+
+/* Tags */
+.badge {
+    font-size: 0.8rem;
+    padding: 0.35em 0.65em;
+    transition: all 0.2s ease-in-out;
+}
+
+.badge:hover {
+    transform: scale(1.05);
+}
+
+/* Category Icons */
+.card-title .fas {
+    width: 1.5em;
+    text-align: center;
+}
+
+/* Priority Indicators */
+.priority-high {
+    border-right: 4px solid #dc3545;
+}
+
+.priority-medium {
+    border-right: 4px solid #ffc107;
+}
+
+.priority-low {
+    border-right: 4px solid #28a745;
+}
+
+/* Template Indicator */
+.template-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: #6c757d;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+}
+
+/* Quest Type Icons */
+.main-quest-icon {
+    color: #ffd700;
+}
+
+.side-quest-icon {
+    color: #17a2b8;
+}
+
+.sub-quest-icon {
+    color: #6c757d;
+}
+
+/* Due Date Warning */
+.due-soon {
+    color: #ffc107;
+}
+
+.overdue {
+    color: #dc3545;
+}
+
+/* Category and Tag Management */
+.category-list, .tag-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.category-item, .tag-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
+    background-color: #f8f9fa;
+}
+
+.category-item:hover, .tag-item:hover {
+    background-color: #e9ecef;
+}
+
+.category-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+/* Form Improvements */
+.form-select[multiple] {
+    height: auto;
+    min-height: 100px;
+}
+
+.color-preview {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sub-quest-card {
+        margin-left: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .badge {
+        font-size: 0.7rem;
+    }
+}
